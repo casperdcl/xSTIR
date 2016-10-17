@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#include "cstir.h"
 #include "data_handle.h"
-//#include "iutilities.h"
 #include "stir.h"
-//#include "stir_p.h"
 #include "stir_x.h"
 
+
+// Linux Matlab cannot stand this
+//#include "cstir.h"
+//#include "iutilities.h"
+//#include "stir_p.h"
+// and cannot find charDataFromHandle
 static char* _charDataFromHandle(const DataHandle* ptr_h)
 {
 	void* ptr_d = ptr_h->data();
