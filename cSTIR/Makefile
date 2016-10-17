@@ -8,6 +8,7 @@ ARCHFLAGS = cr
 RANLIB = ranlib
 
 IUTILITIES = $(SRC_PATH)/iUtilities
+CSTIR_SRC = $(SRC_PATH)/cSTIR
 
 CSTIRLIB = libcstir.a
 CSTIR_LIB = -lcstir

@@ -5,15 +5,16 @@ CFLAGS = $(EXTRA_CFLAGS) -fpermissive -fPIC -std=c++11 -I$(IUTILITIES) -I$(STIR_
 # enable this (or use it on the command line) if you compiled STIR with OPENMP=ON
 OPENMPFLAGS=-fopenmp
 #EXTRA_LDFLAGS=-g
-LDFLAGS = $(X11LIB) -lrt $(OPENMPFLAGS) $(EXTRA_LDFLAGS)
+LDFLAGS = -lX11
+#$(X11LIB) -lrt $(OPENMPFLAGS) $(EXTRA_LDFLAGS)
 
 BUILDPATH = $(BUILD_PATH)/xSTIR
 
 SWIG = swig
 
-ifneq ($(wildcard /*/lib/X11/.*),)
-	X11LIB = -lX11
-endif
+#ifneq ($(wildcard /*/lib/X11/.*),)
+#	X11LIB = -lX11
+#endif
 
 ARCH = ar
 ARCHFLAGS = cr
@@ -23,6 +24,7 @@ IUTILITIES = $(SRC_PATH)/iUtilities
 LIBIUTIL = $(BUILD_PATH)/iUtilities
 IUTIL_LIB = -liutil
 
+CSTIR_SRC = $(SRC_PATH)/cSTIR
 CSTIRLIB = libcstir.a
 CSTIR_LIB = -lcstir
 
@@ -77,9 +79,9 @@ spatial_transformation_registries.o: \
 		$(STIR_SRC)/spatial_transformation_buildblock/spatial_transformation_registries.cxx
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
-_pystir.so: $(CSTIR_SRC)/cstir.h $(REG_OBJECTS) $(BUILDPATH)/$(CSTIRLIB)
+_pystir.so: $(REG_OBJECTS) $(BUILDPATH)/$(CSTIRLIB)
 	$(SWIG) -c++ -python pystir.i
-	$(CXX) $(CFLAGS) -c pystir_wrap.cxx -I$(PYINCLUDE) -I$(PYLIBPATH)
+	$(CXX) $(CFLAGS) -c pystir_wrap.cxx -I$(PYINCLUDE)
 	$(CXX) $(CFLAGS) -shared  -o _pystir.so pystir_wrap.o $(REG_OBJECTS) -L$(PYLIBPATH) -l$(PYTHON) \
 		-L$(LIBIUTIL) $(IUTIL_LIB) \
 		-L$(BUILDPATH) $(CSTIR_LIB) -L$(STIR_LIBPATH) $(STIR_LIBS) $(LDFLAGS)
