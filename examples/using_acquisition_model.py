@@ -121,7 +121,7 @@ def main():
     recon.set_save_interval(num_subiterations)
     recon.set_inter_iteration_filter_interval(1)
     recon.set_inter_iteration_filter(filter)
-    recon.set_output_filename_prefix('reconstructedImage')
+    recon.set_output_filename_prefix('reconstructed_image')
 
     # set up the reconstructor
     recon.set_up(reconstructedImage)

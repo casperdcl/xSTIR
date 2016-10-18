@@ -20,7 +20,7 @@ args = parser.parse_args()
 def main():
 
     # direct all diagnostic printing to a file
-    printer = stir.printerTo('stir_demo3.txt')
+    printer = stir.printerTo('stir.txt')
 
     # create matrix to be used by projectors
     matrix = stir.RayTracingMatrix()
@@ -52,7 +52,7 @@ def main():
 
     # create OSSPS reconstructor
     recon = stir.OSSPSReconstruction()
-    recon.set_output_filename_prefix('reconstructedImage')
+    recon.set_output_filename_prefix('reconstructed_image')
     recon.set_num_subsets(4)
     recon.set_num_subiterations(8)
     recon.set_save_interval(8)

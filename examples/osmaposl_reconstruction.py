@@ -21,9 +21,9 @@ args = parser.parse_args()
 def main():
 
     # direct all information printing to a file
-    info_printer = stir.printerTo('stir_demo2info.txt', stir.INFO_CHANNEL)
+    info_printer = stir.printerTo('stir_info.txt', stir.INFO_CHANNEL)
     # direct all warning printing to a file
-    warning_printer = stir.printerTo('stir_demo2warn.txt', stir.WARNING_CHANNEL)
+    warning_printer = stir.printerTo('stir_warn.txt', stir.WARNING_CHANNEL)
     # direct all error printing to stdout
     error_printer = stir.printerTo('stdout', stir.ERROR_CHANNEL)
 
@@ -75,7 +75,7 @@ def main():
     recon.set_save_interval(num_subiterations)
     recon.set_inter_iteration_filter_interval(1)
     recon.set_inter_iteration_filter(filter)
-    recon.set_output_filename_prefix('reconstructedImage')
+    recon.set_output_filename_prefix('reconstructed_image')
 
     # set up the reconstructor
     print('setting up, please wait...')

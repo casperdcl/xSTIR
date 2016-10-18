@@ -11,17 +11,15 @@ if ~libisloaded('mstir')
 end
 
 try
-    % info() printing suppressed, warning() and error() print to stdout
-    printer = stir.Printer();
     % all printing goes to stdout 
     % printer = stir.Printer('stdout');
-    % info() prints to file
-    % printer = stir.Printer('stir_demo4_info.txt');
+    % info() prints to a file
+    printer = stir.Printer('stir_info.txt');
     % info() and warning() print to file
-    % printer = stir.Printer('stir_demo4_info.txt', 'stir_demo4_warn.txt');
+    % printer = stir.Printer('stir_info.txt', 'stir_warn.txt');
     % all printing goes to files
     % printer = stir.Printer...
-    %     ('stir_demo4_info.txt', 'stir_demo4_warn.txt', 'stir_demo4_errr.txt');
+    %     ('stir_info.txt', 'stir_warn.txt', 'stir_errr.txt');
 
     % create empty image
     image = stir.Image();
@@ -71,7 +69,7 @@ try
     % create an initial image estimate
     reconstructedImage = stir.Image();
     reconstructedImage.initialise(image_size, voxel_size)
-    reconstructedImage.fill(1.0)
+    reconstructedImage.fill(1.0);
     % apply filter to get a cylindric initial image
     filter.apply(reconstructedImage)
 

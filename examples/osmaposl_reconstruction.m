@@ -12,7 +12,7 @@ end
 
 try
     % information on computation progress to go to this file
-    printer_info = stir.printerTo('stir_demo2.txt', 0);
+    printer_info = stir.printerTo('stir_info.txt', 0);
 
     % warning and error messages to go to Matlab Command Window
     printer_warn = stir.printerTo('stdout', 1);
@@ -42,7 +42,7 @@ try
     image_size = [111, 111, 31];
     voxel_size = [3, 3, 3.375];
     image.initialise(image_size, voxel_size)    
-    image.fill(1.0)
+    image.fill(1.0);
     filter.set_strictly_less_than_radius(false)
     filter.apply(image)
     filter.set_strictly_less_than_radius(true)

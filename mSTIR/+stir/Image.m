@@ -67,8 +67,15 @@ classdef Image < handle
                 self.voxels);
             stir.checkExecutionStatus('Image:initialise', self.handle)
         end
-        function fill(self, value)
-            calllib('mstir', 'mSTIR_fillImage', self.handle, value)
+        function image = fill(self, value)
+            if numel(value) == 1
+                calllib('mstir', 'mSTIR_fillImage', self.handle, value)
+            else
+                ptr_v = libpointer('doublePtr', value);
+                calllib('mstir', 'mSTIR_setImageData', self.handle, ptr_v)
+            end
+            image = self;
+            %calllib('mstir', 'mSTIR_fillImage', self.handle, value)
         end
         function image = clone(self)
             image = stir.Image();
