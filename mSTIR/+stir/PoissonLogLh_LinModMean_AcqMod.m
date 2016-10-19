@@ -1,6 +1,6 @@
-classdef PoissonLogLh_LinModMean_AcqModData < stir.PoissonLogLh_LinModMean
+classdef PoissonLogLh_LinModMean_AcqMod < stir.PoissonLogLh_LinModMean
     methods
-        function self = PoissonLogLh_LinModMean_AcqModData(obj_fun)
+        function self = PoissonLogLh_LinModMean_AcqMod(obj_fun)
             self.name =...
                 'PoissonLogLikelihoodWithLinearModelForMeanAndProjData';
             if nargin < 1
@@ -8,12 +8,10 @@ classdef PoissonLogLh_LinModMean_AcqModData < stir.PoissonLogLh_LinModMean
             else
                 self.handle = calllib...
                     ('mutilities', 'mCopyOfObjectHandle', obj_fun.handle);
-%                    ('mstir', 'mSTIR_copyOfObject', obj_fun.handle);
             end
         end
         function delete(self)
             calllib('mutilities', 'mDeleteDataHandle', self.handle)
-%            calllib('mstir', 'mSTIR_deleteObject', self.handle)
             self.handle = [];
         end
         function set_input_filename(self, filename)

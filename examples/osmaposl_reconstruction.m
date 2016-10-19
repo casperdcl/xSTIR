@@ -48,7 +48,7 @@ try
     filter.set_strictly_less_than_radius(true)
 
     % create objective function
-    obj_fun = stir.PoissonLogLh_LinModMean_AcqModData();
+    obj_fun = stir.PoissonLogLh_LinModMean_AcqMod();
     obj_fun.set_zero_seg0_end_planes(true)
     obj_fun.set_max_segment_num_to_process(3)
     obj_fun.set_acquisition_model(am)
