@@ -8,7 +8,8 @@ except:
     HAVE_PYLAB = False
 import sys
 sys.path.append(os.environ.get('CSTIR_SRC') + '/../pSTIR')
-import stir
+
+from pStir import *
 
 parser = argparse.ArgumentParser(description = \
 '''
@@ -20,27 +21,27 @@ args = parser.parse_args()
 def main():
 
     # direct all diagnostic printing to a file
-    printer = stir.printerTo('stir.txt')
+    printer = printerTo('stir.txt')
 
     # create matrix to be used by projectors
-    matrix = stir.RayTracingMatrix()
+    matrix = RayTracingMatrix()
     matrix.set_num_tangential_LORs(2)
     n = matrix.get_num_tangential_LORs()
 
     # create acquisition model
-    am = stir.AcquisitionModelUsingMatrix()
+    am = AcquisitionModelUsingMatrix()
     am.set_matrix(matrix)
 
     # read acquisition model data
-    ad = stir.AcquisitionData('Utahscat600k_ca_seg4.hs')
+    ad = AcquisitionData('Utahscat600k_ca_seg4.hs')
 ##    ad.read_from_file('Utahscat600k_ca_seg4.hs')
 
     # create prior
-    prior = stir.QuadraticPrior()
+    prior = QuadraticPrior()
     prior.set_penalisation_factor(0.5)
 
     # create objective function
-    obj_fun = stir.PoissonLogLh_LinModMean_AcqModData()
+    obj_fun = PoissonLogLh_LinModMean_AcqMod()
     obj_fun.set_sensitivity_filename('RPTsens_seg3_PM.hv')
     obj_fun.set_recompute_sensitivity(True)
     obj_fun.set_use_subset_sensitivities(False)
@@ -51,7 +52,7 @@ def main():
     obj_fun.set_prior(prior)
 
     # create OSSPS reconstructor
-    recon = stir.OSSPSReconstruction()
+    recon = OSSPSReconstruction()
     recon.set_output_filename_prefix('reconstructed_image')
     recon.set_num_subsets(4)
     recon.set_num_subiterations(8)
@@ -60,7 +61,7 @@ def main():
     recon.set_objective_function(obj_fun)
 
     # read an initial estimate for the reconstructed image from a file
-    image = stir.Image()
+    image = Image()
     image.read_from_file('test_image_PM_QP_6.hv')
 
     # set up the reconstructor
@@ -91,7 +92,7 @@ def main():
             pylab.show()
 
     # compare the reconstructed image to the expected image
-    expectedImage = stir.Image()
+    expectedImage = Image()
     expectedImage.read_from_file('test_image_OSSPS_PM_QP_8.hv')
     diff = expectedImage.diff_from(image)
     print('difference from expected image: %e' % diff)
@@ -118,6 +119,6 @@ def main():
 # (cf. Error Handling section in the spec)
 try:
     main()
-except stir.error as err:
+except error as err:
     # display error information
     print('STIR exception occured:\n', err.value)

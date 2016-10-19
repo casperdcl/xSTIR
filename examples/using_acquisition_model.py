@@ -8,7 +8,8 @@ except:
     HAVE_PYLAB = False
 import sys
 sys.path.append(os.environ.get('CSTIR_SRC') + '/../pSTIR')
-import stir
+
+from pStir import *
 
 parser = argparse.ArgumentParser(description = \
 '''
@@ -20,20 +21,20 @@ args = parser.parse_args()
 def main():
 
     # all output goes to stdout
-    printer = stir.Printer('stdout')
-##    printer = stir.Printer\
+    printer = Printer('stdout')
+##    printer = Printer\
 ##        ('stir_demo4_info.txt',\
 ##         'stir_demo4_warn.txt',\
 ##         'stir_demo4_errr.txt')
 
     # create an empty image
-    image = stir.Image()
+    image = Image()
     image_size = (111, 111, 31)
     voxel_size = (3, 3, 3.375)
     image.initialise(image_size, voxel_size)
 
     # create a shape
-    shape = stir.EllipsoidalCylinder()
+    shape = EllipsoidalCylinder()
 
     # add a shape
     shape.set_length(400)
@@ -62,22 +63,22 @@ def main():
         pylab.show()
 
     # define the matrix to be used by the acquisition model
-    matrix = stir.RayTracingMatrix()
+    matrix = RayTracingMatrix()
     matrix.set_num_tangential_LORs(2)
 
     # define the acquisition model
-    am = stir.AcquisitionModelUsingMatrix()
+    am = AcquisitionModelUsingMatrix()
     am.set_matrix(matrix)
 
     # define a prior
-    prior = stir.QuadraticPrior()
+    prior = QuadraticPrior()
     prior.set_penalisation_factor(0.001)
 
     # define a filter
-    filter = stir.CylindricFilter()
+    filter = CylindricFilter()
 
     # create an initial image estimate
-    reconstructedImage = stir.Image()
+    reconstructedImage = Image()
     reconstructedImage.initialise(image_size, voxel_size)
     reconstructedImage.fill(1.0)
     # apply filter to get a cylindric initial image
@@ -104,7 +105,7 @@ def main():
     update = am.backward(ad)
 
     # define the objective function
-    obj_fun = stir.PoissonLogLh_LinModMean_AcqModData()
+    obj_fun = PoissonLogLh_LinModMean_AcqMod()
     obj_fun.set_max_segment_num_to_process(3)
     obj_fun.set_acquisition_model(am)
     obj_fun.set_acquisition_data(ad)
@@ -113,7 +114,7 @@ def main():
     num_subiterations = 2
 
     # create OSMAPOSL reconstructor
-    recon = stir.OSMAPOSLReconstruction()
+    recon = OSMAPOSLReconstruction()
     recon.set_objective_function(obj_fun)
     recon.set_MAP_model('multiplicative')
     recon.set_num_subsets(12)
@@ -141,5 +142,5 @@ def main():
 
 try:
     main()
-except stir.error as err:
+except error as err:
     print('STIR exception occured:\n', err.value)
