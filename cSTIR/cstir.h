@@ -39,6 +39,11 @@ extern "C" {
 	// OBJECTIVE FUNCTION METHODS
 	void* cSTIR_value(void* ptr_f, void* ptr_i);
 	void* cSTIR_gradient(void* ptr_f, void* ptr_i, int subset);
+	void*	cSTIR_subsetSensitivity(void* ptr_f, int subset);
+	void* cSTIR_objectiveFunctionGradient
+		(void* ptr_f, void* ptr_i, int subset);
+	void* cSTIR_objectiveFunctionGradientNotDivided
+		(void* ptr_f, void* ptr_i, int subset);
 
 	// Image methods
 	void cSTIR_getImageDimensions(const void* ptr, PTR_INT pd);
