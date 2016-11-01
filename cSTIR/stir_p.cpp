@@ -5,21 +5,6 @@
 #include "stir.h"
 #include "stir_x.h"
 
-
-// Linux Matlab cannot stand this
-//#include "cstir.h"
-//#include "iutilities.h"
-//#include "stir_p.h"
-// and cannot find charDataFromHandle
-static char* _charDataFromHandle(const DataHandle* ptr_h)
-{
-	void* ptr_d = ptr_h->data();
-	if (!ptr_d)
-		return 0;
-	else
-		return (char*)ptr_d;
-}
-
 static void*
 parameterNotFound(const char* name, const char* file, int line) 
 {
@@ -146,7 +131,7 @@ cSTIR_setTruncateToCylindricalFOVImageProcessorParameter
 		objectFromHandle< DataProcessor3DF, CylindricFilter3DF >(hp);
 	if (boost::iequals(name, "strictly_less_than_radius"))
 		filter.set_strictly_less_than_radius
-			(boost::iequals(_charDataFromHandle(hv), "true"));
+			(boost::iequals(charDataFromDataHandle(hv), "true"));
 	else
 		return parameterNotFound(name, __FILE__, __LINE__);
 	return new DataHandle;
@@ -285,13 +270,13 @@ cSTIR_setPoissonLogLikelihoodWithLinearModelForMeanParameter
 	PoissonLogLhLinModMean3DF& obj_fun = objectFromHandle
 		< ObjectiveFunction3DF, PoissonLogLhLinModMean3DF >(hp);
 	if (boost::iequals(name, "sensitivity_filename"))
-		obj_fun.set_sensitivity_filename(_charDataFromHandle(hv));
+		obj_fun.set_sensitivity_filename(charDataFromDataHandle(hv));
 	else if (boost::iequals(name, "use_subset_sensitivities"))
 		obj_fun.set_use_subset_sensitivities
-			(boost::iequals(_charDataFromHandle(hv), "true"));
+			(boost::iequals(charDataFromDataHandle(hv), "true"));
 	else if (boost::iequals(name, "recompute_sensitivity"))
 		obj_fun.set_recompute_sensitivity
-			(boost::iequals(_charDataFromHandle(hv), "true"));
+			(boost::iequals(charDataFromDataHandle(hv), "true"));
 	else
 		return parameterNotFound(name, __FILE__, __LINE__);
 	return new DataHandle;
@@ -309,10 +294,10 @@ cSTIR_setPoissonLogLikelihoodWithLinearModelForMeanAndProjDataParameter
 	//PoissonLogLhLinModMeanProjData3DF& obj_fun = objectFromHandle
 	//	< ObjectiveFunction3DF, PoissonLogLhLinModMeanProjData3DF >(hp);
 	if (boost::iequals(name, "input_filename"))
-		obj_fun.set_input_file(_charDataFromHandle(hv));
+		obj_fun.set_input_file(charDataFromDataHandle(hv));
 	else if (boost::iequals(name, "zero_seg0_end_planes"))
 		obj_fun.set_zero_seg0_end_planes
-			(boost::iequals(_charDataFromHandle(hv), "true"));
+			(boost::iequals(charDataFromDataHandle(hv), "true"));
 	else if (boost::iequals(name, "max_segment_num_to_process"))
 		obj_fun.set_max_segment_num_to_process(dataFromHandle<int>((void*)hv));
 		//obj_fun.set_max_segment_num_to_process(intDataFromHandle((void*)hv));
@@ -347,7 +332,7 @@ cSTIR_setReconstructionParameter
 	Reconstruction<Image3DF>& recon =
 		objectFromHandle< Reconstruction<Image3DF> >(hp);
 	if (boost::iequals(name, "output_filename_prefix"))
-		recon.set_output_filename_prefix(_charDataFromHandle(hv));
+		recon.set_output_filename_prefix(charDataFromDataHandle(hv));
 	else
 		return parameterNotFound(name, __FILE__, __LINE__);
 	return new DataHandle;
@@ -366,7 +351,7 @@ cSTIR_setIterativeReconstructionParameter
 		recon.set_objective_function_sptr
 			(sptrDataFromHandle< ObjectiveFunction3DF >(hv));
 	else if (boost::iequals(name, "initial_estimate"))
-		xSTIR_set_initial_estimate_file(&recon, _charDataFromHandle(hv));
+		xSTIR_set_initial_estimate_file(&recon, charDataFromDataHandle(hv));
 	else {
 		//int value = intDataFromHandle((void*)hv);
 		int value = dataFromHandle<int>((void*)hv);
@@ -429,7 +414,7 @@ cSTIR_setOSMAPOSLParameter
 		objectFromHandle< Reconstruction<Image3DF>,
 		OSMAPOSLReconstruction<Image3DF> >(hp);
 	if (boost::iequals(name, "MAP_model"))
-		recon.set_MAP_model(_charDataFromHandle(hv));
+		recon.set_MAP_model(charDataFromDataHandle(hv));
 	else
 		return parameterNotFound(name, __FILE__, __LINE__);
 	return new DataHandle;
