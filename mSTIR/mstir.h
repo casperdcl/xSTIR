@@ -18,7 +18,6 @@ EXPORTED_FUNCTION  void* mSTIR_newObject(const char* name);
 EXPORTED_FUNCTION 	void* mSTIR_objectFromFile(const char* name, const char* filename);
 EXPORTED_FUNCTION 	void* mSTIR_setParameter (void* ptr, const char* obj, const char* name, const void* value);
 EXPORTED_FUNCTION 	void* mSTIR_parameter(const void* ptr, const char* obj, const char* name);
-EXPORTED_FUNCTION 	void* mSTIR_setupObject(const char* obj, void* ptr_obj);
 EXPORTED_FUNCTION 	void* mSTIR_applyDataProcessor(const void* ptr_p, void* ptr_d);
 EXPORTED_FUNCTION 	void* mSTIR_acquisitionModelSetup(void* ptr_am, const char* templ, void* ptr_im);
 EXPORTED_FUNCTION 	void* mSTIR_acquisitionModelForward (void* ptr_am, const char* datafile, void* ptr_dt, void* ptr_im);
@@ -26,6 +25,7 @@ EXPORTED_FUNCTION 	void* mSTIR_acquisitionModelBackward(void* ptr_am, void* ptr_
 EXPORTED_FUNCTION 	void* mSTIR_setupReconstruction(void* ptr_r, void* ptr_i);
 EXPORTED_FUNCTION 	void* mSTIR_runReconstruction(void* ptr_r, void* ptr_i);
 EXPORTED_FUNCTION 	void* mSTIR_updateReconstruction(void* ptr_r, void* ptr_i);
+EXPORTED_FUNCTION 	void* mSTIR_setupObjectiveFunction(void* ptr_r, void* ptr_i);
 EXPORTED_FUNCTION 	void* mSTIR_value(void* ptr_f, void* ptr_i);
 EXPORTED_FUNCTION 	void* mSTIR_gradient(void* ptr_f, void* ptr_i, int subset);
 EXPORTED_FUNCTION 	void mSTIR_getImageDimensions(const void* ptr, PTR_INT pd);

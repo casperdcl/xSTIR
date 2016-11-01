@@ -27,9 +27,6 @@ EXPORTED_FUNCTION 	void* mSTIR_setParameter (void* ptr, const char* obj, const c
 EXPORTED_FUNCTION 	void* mSTIR_parameter(const void* ptr, const char* obj, const char* name) {
 	return cSTIR_parameter(ptr, obj, name);
 }
-EXPORTED_FUNCTION 	void* mSTIR_setupObject(const char* obj, void* ptr_obj) {
-	return cSTIR_setupObject(obj, ptr_obj);
-}
 EXPORTED_FUNCTION 	void* mSTIR_applyDataProcessor(const void* ptr_p, void* ptr_d) {
 	return cSTIR_applyDataProcessor(ptr_p, ptr_d);
 }
@@ -50,6 +47,9 @@ EXPORTED_FUNCTION 	void* mSTIR_runReconstruction(void* ptr_r, void* ptr_i) {
 }
 EXPORTED_FUNCTION 	void* mSTIR_updateReconstruction(void* ptr_r, void* ptr_i) {
 	return cSTIR_updateReconstruction(ptr_r, ptr_i);
+}
+EXPORTED_FUNCTION 	void* mSTIR_setupObjectiveFunction(void* ptr_r, void* ptr_i) {
+	return cSTIR_setupObjectiveFunction(ptr_r, ptr_i);
 }
 EXPORTED_FUNCTION 	void* mSTIR_value(void* ptr_f, void* ptr_i) {
 	return cSTIR_value(ptr_f, ptr_i);
