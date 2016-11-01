@@ -9,7 +9,6 @@ classdef ObjectiveFunction < handle
         end
         function delete(self)
             if ~isempty(self.handle)
-%                calllib('mstir', 'mSTIR_deleteObject', self.handle)
                 calllib('mutilities', 'mDeleteDataHandle', self.handle)
             end
         end
@@ -25,10 +24,10 @@ classdef ObjectiveFunction < handle
             stir.checkExecutionStatus...
                 ('GeneralisedObjectiveFunction:get_prior', prior.handle)
         end
-        function set_up(self)
+        function set_up(self, image)
             h = calllib...
-                ('mstir', 'mSTIR_setupObject', 'GeneralisedObjectiveFunction',...
-                self.handle);
+                ('mstir', 'mSTIR_setupObjectiveFunction', ...
+                self.handle, image.handle);
             stir.checkExecutionStatus...
                 ('GeneralisedObjectiveFunction:set_up', h)
             calllib('mutilities', 'mDeleteDataHandle', h)
