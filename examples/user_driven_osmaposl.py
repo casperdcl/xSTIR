@@ -32,7 +32,7 @@ def main():
     am.set_matrix(matrix)
 
     # define acquisition data
-    ad = AcquisitionData('../examples/my_forward_projection.hs')
+    ad = AcquisitionData('my_forward_projection.hs')
 
     # create filter
     filter = CylindricFilter()
@@ -48,20 +48,10 @@ def main():
     obj_fun = PoissonLogLh_LinModMean_AcqMod()
     obj_fun.set_acquisition_model(am)
     obj_fun.set_acquisition_data(ad)
+    obj_fun.set_num_subsets(12)
+    obj_fun.set_up(image)
 
     num_subiterations = 2
-
-    # create OSMAPOSL reconstructor
-    recon = OSMAPOSLReconstruction()
-    recon.set_objective_function(obj_fun)
-    recon.set_num_subsets(12)
-    recon.set_num_subiterations(num_subiterations)
-    recon.set_save_interval(num_subiterations)
-    recon.set_output_filename_prefix('reconstructed_image')
-
-    # set up the reconstructor
-    print('setting up, please wait...')
-    recon.set_up(image)
 
 ##    ss = obj_fun.get_subset_sensitivity(0)
 ##    data = ss.as_array()
@@ -80,19 +70,33 @@ def main():
     eps = 1e-6
 
     for iter in range(1, num_subiterations + 1):
-        print('\n------------- Subiteration %d' % recon.get_subiteration_num())
+        print('\n------------- Subiteration %d' % iter) 
+
+        # select subset
         subset = iter - 1
-##        recon.update(image)
-        data = image.as_array()
+
+        # get sensitivity as Image
         ss = obj_fun.get_subset_sensitivity(subset)
-        sdata = ss.as_array()
-        sdata[sdata < eps] = eps
+
+        # get gradient not divided by sensitivity (+prior) as Image
         grad = obj_fun.get_gradient_not_divided(image, subset)
+
+        # copy to Python arrays
+        data = image.as_array()
+        sdata = ss.as_array()
+        sdata[sdata < eps] = eps # avoid division by zero
         gdata = grad.as_array()
+
+        # update image data
         data = data*gdata/sdata
+
+        # fill current image with new values
         image.fill(data)
+
+        # apply filter
         filter.apply(image)
 
+        # show current image
         data = image.as_array()
         pylab.figure(iter + 1)
         pylab.imshow(data[20,:,:])

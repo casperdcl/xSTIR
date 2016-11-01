@@ -260,6 +260,8 @@ cSTIR_setGeneralisedObjectiveFunctionParameter
 	if (boost::iequals(name, "prior"))
 		obj_fun.set_prior_sptr
 			(sptrDataFromHandle<GeneralisedPrior<Image3DF> >(hv));
+	else if (boost::iequals(name, "num_subsets"))
+		obj_fun.set_num_subsets(dataFromHandle<int>((void*)hv));
 	else
 		return parameterNotFound(name, __FILE__, __LINE__);
 	return new DataHandle;

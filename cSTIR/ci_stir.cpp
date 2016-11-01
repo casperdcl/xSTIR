@@ -205,6 +205,7 @@ void* cSTIR_objectFromFile(const char* name, const char* filename)
 	CATCH
 }
 
+/*
 extern "C"
 void* cSTIR_setupObject(const char* obj, void* ptr_obj)
 {
@@ -225,6 +226,7 @@ void* cSTIR_setupObject(const char* obj, void* ptr_obj)
 	}
 	CATCH
 }
+*/
 
 extern "C"
 void* cSTIR_applyDataProcessor(const void* ptr_p, void* ptr_i)
@@ -371,6 +373,27 @@ void* cSTIR_updateReconstruction(void* ptr_r, void* ptr_i)
 		return (void*) new DataHandle;
 	}
 	CATCH
+}
+
+extern "C"
+void* cSTIR_setupObjectiveFunction(void* ptr_r, void* ptr_i)
+{
+	try {
+		DataHandle* handle = new DataHandle;
+		sptrImage3DF& sptr_image = objectSptrFromHandle<Image3DF>(ptr_i);
+		xSTIR_GeneralisedObjectiveFunction3DF& obj_fun =
+			objectFromHandle<xSTIR_GeneralisedObjectiveFunction3DF>(ptr_r);
+		Succeeded s = Succeeded::no;
+		//if (!obj_fun.post_process())
+			s = obj_fun.set_up(sptr_image);
+		if (s != Succeeded::yes) {
+			ExecutionStatus status("cSTIR_setupObjectiveFunction failed",
+				__FILE__, __LINE__);
+			handle->set(0, &status);
+		}
+		return (void*)handle;
+	}
+	CATCH;
 }
 
 extern "C"

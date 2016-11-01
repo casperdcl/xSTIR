@@ -476,9 +476,14 @@ class ObjectiveFunction:
             (self.handle, 'GeneralisedObjectiveFunction', 'prior')
         _check_status(prior.handle)
         return prior
-    def set_up(self):
-        handle = pystir.cSTIR_setupObject\
-            ('GeneralisedObjectiveFunction', self.handle)
+    def set_num_subsets(self, n):
+        _set_int_par\
+            (self.handle, 'GeneralisedObjectiveFunction', 'num_subsets', n)
+#    def set_up(self):
+#        handle = pystir.cSTIR_setupObject\
+#            ('GeneralisedObjectiveFunction', self.handle)
+    def set_up(self, image):
+        handle = pystir.cSTIR_setupObjectiveFunction(self.handle, image.handle)
         _check_status(handle)
         pystir.deleteDataHandle(handle)
     def value(self, image):

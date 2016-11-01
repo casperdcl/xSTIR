@@ -20,7 +20,7 @@ extern "C" {
 	void* cSTIR_setParameter
 		(void* ptr, const char* obj, const char* name, const void* value);
 	void* cSTIR_parameter(const void* ptr, const char* obj, const char* name);
-	void* cSTIR_setupObject(const char* obj, void* ptr_obj);
+	//void* cSTIR_setupObject(const char* obj, void* ptr_obj);
 
 	// DataProcessor methods
 	void* cSTIR_applyDataProcessor(const void* ptr_p, void* ptr_d);
@@ -37,6 +37,7 @@ extern "C" {
 	void* cSTIR_updateReconstruction(void* ptr_r, void* ptr_i);
 
 	// OBJECTIVE FUNCTION METHODS
+	void* cSTIR_setupObjectiveFunction(void* ptr_r, void* ptr_i);
 	void* cSTIR_value(void* ptr_f, void* ptr_i);
 	void* cSTIR_gradient(void* ptr_f, void* ptr_i, int subset);
 	void*	cSTIR_subsetSensitivity(void* ptr_f, int subset);
