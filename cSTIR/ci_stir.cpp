@@ -474,6 +474,20 @@ cSTIR_objectiveFunctionGradientNotDivided(void* ptr_f, void* ptr_i, int subset)
 	CATCH;
 }
 
+extern "C"
+void*
+cSTIR_priorGradient(void* ptr_p, void* ptr_i)
+{
+	try {
+		Prior3DF& prior = objectFromHandle< Prior3DF>(ptr_p);
+		Image3DF& image = objectFromHandle<Image3DF>(ptr_i);
+		sptrImage3DF* sptr = new sptrImage3DF(image.get_empty_copy());
+		Image3DF& grad = **sptr; // ->get();
+		prior.compute_gradient(grad, image);
+		return newObjectHandle(sptr);
+	}
+	CATCH;
+}
 
 extern "C"
 void* cSTIR_voxels3DF
