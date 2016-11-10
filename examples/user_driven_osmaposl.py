@@ -44,30 +44,21 @@ def main():
     image.initialise(image_size, voxel_size)
     image.fill(1.0)
 
+    # create prior
+    prior = QuadraticPrior()
+    prior.set_penalisation_factor(0.5)
+
+    # set number of subsets
+    num_subsets = 12
+
     # create objective function
     obj_fun = PoissonLogLh_LinModMean_AcqMod()
     obj_fun.set_acquisition_model(am)
     obj_fun.set_acquisition_data(ad)
-    obj_fun.set_num_subsets(12)
+    obj_fun.set_num_subsets(num_subsets)
     obj_fun.set_up(image)
 
     num_subiterations = 2
-
-##    ss = obj_fun.get_subset_sensitivity(0)
-##    data = ss.as_array()
-##    pylab.figure(1)
-##    pylab.imshow(data[20,:,:])
-##    print('Figure 1: subset 0 sensitivity - close window to continue')
-##    pylab.show()
-##
-##    grad = obj_fun.get_gradient_not_divided(image, 0)
-##    data = grad.as_array()
-##    pylab.figure(1)
-##    pylab.imshow(data[20,:,:])
-##    print('Figure 2: subset 0 gradient - close window to continue')
-##    pylab.show()
-
-    eps = 1e-6
 
     for iter in range(1, num_subiterations + 1):
         print('\n------------- Subiteration %d' % iter) 
@@ -76,31 +67,37 @@ def main():
         subset = iter - 1
 
         # get sensitivity as Image
-        ss = obj_fun.get_subset_sensitivity(subset)
+        ss_img = obj_fun.get_subset_sensitivity(subset)
 
-        # get gradient not divided by sensitivity (+prior) as Image
-        grad = obj_fun.get_gradient_not_divided(image, subset)
+        # get gradient not divided by sensitivity+prior as Image
+        grad_img = obj_fun.get_gradient_not_divided(image, subset)
+
+        # get gradient of prior as Image
+        pgrad_img = prior.get_gradient(image)
 
         # copy to Python arrays
-        data = image.as_array()
-        sdata = ss.as_array()
-        sdata[sdata < eps] = eps # avoid division by zero
-        gdata = grad.as_array()
+        image_arr = image.as_array()
+        ss_arr = ss_img.as_array()
+        grad_arr = grad_img.as_array()
+        pgrad_arr = pgrad_img.as_array()
 
         # update image data
-        data = data*gdata/sdata
+        ss_arr[ss_arr < 1e-6] = 1e-6 # avoid division by zero
+        update = grad_arr/(ss_arr + pgrad_arr/num_subsets)
+        image_arr = image_arr*update
 
         # fill current image with new values
-        image.fill(data)
+        image.fill(image_arr)
 
         # apply filter
         filter.apply(image)
 
-        # show current image
-        data = image.as_array()
-        pylab.figure(iter + 1)
-        pylab.imshow(data[20,:,:])
-        print('close Figure %d window to continue' % (iter + 1))
+        # show current image at z = 20
+        image_arr = image.as_array()
+        pylab.figure(iter)
+        pylab.title('Image at z = 20, iteration %d' % iter)
+        pylab.imshow(image_arr[20,:,:])
+        print('close Figure %d window to continue' % iter)
         pylab.show()
 
 # if anything goes wrong, an exception will be thrown 
