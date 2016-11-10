@@ -69,8 +69,9 @@ def main():
         # get sensitivity as Image
         ss_img = obj_fun.get_subset_sensitivity(subset)
 
-        # get gradient not divided by sensitivity+prior as Image
-        grad_img = obj_fun.get_update_factor_without_denominator(image, subset)
+        # get gradient (without penalty) + sensitivity as Image
+        # (back projection of the ratio of measured to estimated acquisition data)
+        grad_img = obj_fun.get_gradient_plus_sensitivity_no_penalty(image, subset)
 
         # get gradient of prior as Image
         pgrad_img = prior.get_gradient(image)
